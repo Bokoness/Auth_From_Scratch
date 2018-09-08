@@ -10,6 +10,7 @@
   "author": "Mostafa Eweda <mo.eweda@gmail.com>",
   "dependencies": {
     "async": "~0.2.8",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "client-sessions": "^0.8.0",
     "express": "^3.2.6",

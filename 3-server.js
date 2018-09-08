@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const sessions = require("client-sessions"); // a session package made by Mozilla
+const bcrypt = require("bcryptjs");
 
 let app = express();
 
@@ -43,6 +44,8 @@ app.get("/register", (req, res) => {
 
 app.post("/register", (req, res) => {
   console.log("req.body is: ", req.body);
+  let hash = bcrypt.hashSync(req.body.password, 14);
+  req.body.password = hash; // hashing the users password in req.body
   let user = new User(req.body);
 
   user.save((err) => {
@@ -69,20 +72,25 @@ app.get("/login", (req, res) => {
 app.post("/login", (req, res) => {
   console.log("req.body: ", req.body);
   User.findOne({email: req.body.email}, (err, user) => {
-    if(err || !user || req.body.password !== user.password) {
+    if(!user || !bcrypt.compareSync(req.body.password, user.password) ) {
       return res.render("login", {
         error: "Incorrect email / password."
       });
+      res.end();
     }
     req.session.userId = user._id; // adding and encrypting a session to the user
-    console.log('Session found')
+    console.log('Session found');
+
     res.redirect("/dashboard");
   })
 });
 
+//Dashboard route
+//================
 //the dashboard is the page that is shown when user is logged in
 app.get("/dashboard", (req, res) => {
-
+  console.log("in dashboard");
+  console.log("session: ", req.session);
   //if user dont have a session - redirect him to login
   if(!(req.session && req.session.userId)) {
     return res.redirect("/login");
@@ -100,7 +108,6 @@ app.get("/dashboard", (req, res) => {
     // if user's session match DB session
     res.render("dashboard");
   })
-  res.render("login")
 });
 
 //c9
