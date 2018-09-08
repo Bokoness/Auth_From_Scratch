@@ -6,7 +6,7 @@ block vars
 block body 
     h1 Create an Account
     
-    form(method="post")
+    form(action="/register" method="POST")
         span First Name:
         input(type="text", name="firstName", register=true)
         br
@@ -19,8 +19,10 @@ block body
         input(type="email" m name="email", required=true)
         br
         
-        span Passport: 
-        input(type="passport" m name="passport", required=true)
+        span Password: 
+        input(type="password" m name="password", required=true)
         br
         
         input(type="submit")
+
+        

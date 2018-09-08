@@ -9,14 +9,14 @@ block body
     if error 
         p ERROR: #{error}
     
-    from(method="post")
+    form(method="POST" action="/login")
     
         span Email : 
-        input(type="email" m name="email", required=true)
+        input(type="email" name="email", required=true)
         br
         
-        span Passport: 
-        input(type="passport" m name="passport", required=true)
+        span Password: 
+        input(type="password" name="password", required=true)
         br
         
         input(type="submit")
